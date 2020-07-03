@@ -519,7 +519,7 @@ var lineSharing = false;
 						lineWidth = ySpacing;
 					}
 
-					nextSVG= '  <line x1="'+x1+'" y1="'+yPos+'" x2="'+x2+'" y2="'+yPos+'" stroke="'+color+'" stroke-width="'+lineWidth+'" />'+"\n";
+					nextSVG= '  <line class="'+globalContours[i]+'" x1="'+x1+'" y1="'+yPos+'" x2="'+x2+'" y2="'+yPos+'" stroke="'+color+'" stroke-width="'+lineWidth+'" />'+"\n";
 
 					allOverlapSVG += nextSVG;
 				}
