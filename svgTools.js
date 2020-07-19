@@ -1,3 +1,4 @@
+//import { select } from 'editSVG.html';
 //Function to split svg String into seperate lines
 function splitSvg(svgStr){
 	var linesArray = new Array();
@@ -1123,6 +1124,10 @@ function getCols(xStart, xEnd, xSpacing){
 }
 //Swaps 2 rows in the SVG, uses body section of the svg (sections[1]);
 function swapRows(n1, n2){
+	//const s = document.getElementById('showSVG');
+	//s.addEventListener('click', (e) => { console.log(e);});
+
+
 	var linesArray = new Array();
 	var swapLines = new Array();
 	var svgStr = localStorage.getItem("svg");
@@ -1136,6 +1141,16 @@ function swapRows(n1, n2){
 	var start;
 	var end;
 	var size=0;
+
+	//const svgD3 = d3.select('showSVG').innerHTML;
+
+
+	const svgD3 = d3.select('svg');
+
+	//here work
+	var test = workSVG(svgStr);
+	 
+
 
 	var sections = separateSVG(svgStr);
 	var lines = sections[1];
@@ -1207,7 +1222,53 @@ function swapRows(n1, n2){
 	//alert(svgCode);
 	//puts code into local storage to be redrawn by page.
 	localStorage.setItem("svg", svgCode);
+
+	
+	//localStorage.setItem("svg", svgD3);
+
+
 }
+
+
+//work
+
+
+function workSVG(svgStr){
+	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
+	var sections = new Array();
+
+	var workArray = new Array();
+	var value1 = "dog";
+
+	var value1Number;
+
+	var svgCode = svgStr;
+	var lastGuide = 0;
+	linesArray = splitSvg(svgCode);
+	linesArray.shift();
+	//finds where last guide line is drawn.
+	for(var i = 0; i < linesArray.length; i++){
+		if((linesArray[i].includes("class="))){
+			workArray.push(linesArray[i]);
+		}
+	}
+
+	for(var i = 0; i < workArray.length; i++){
+		if (workArray[i].includes(value1)){
+			value1Number = i;
+		}
+	}
+
+
+
+	return sections;
+}
+
+//work
+
+
+
+
 //Function to separate elements of a diagram
 function getLines(input){
 	var lines = input;

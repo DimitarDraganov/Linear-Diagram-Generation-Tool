@@ -5,11 +5,19 @@
 	<title>SVG EDITOR</title>
 
 	<link rel="stylesheet" href="index.css">
-
+	<!--
+	<script src="https://unpkg.com/d3@5.9.2/dist/d3.min.js"></script>
+	-->
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	
+	<script type="text/javascript" src="editSVG.js"></script>
 	<script type="text/javascript" src="utils.js"></script>
 	<script type="text/javascript" src="FileSaver.js"></script>	
 	<script type="text/javascript" src="svgTools.js"></script>
+	
 
+	
+<!--
 	<script type="text/javascript">
 		var svgCode = localStorage.getItem("svg");
 		var downloadName = "linear.svg";
@@ -30,7 +38,58 @@
 		  		document.getElementById('guidesBackground').checked = false;      
 		  		document.getElementById('guidesLines').checked = true; 
 				svgCode = localStorage.getItem("svg");//Gets Svg string from local storage.
-				document.getElementById('showSVG').innerHTML = svgCode;	//draws image
+
+				//document.getElementById('showSVG').innerHTML = svgCode;	//draws image
+
+				// const s = document.getElementById('showSVG');
+				// s.addEventListener('click', (e) => { console.log(e);});
+				//const s = document.getElementById('pet');
+				//s.addEventListener('click', (e) => { console.log(e.AT_TARGET);});
+
+
+				 //var s = d3.select('showSVG').html(svgCode);
+
+				//var s = d3.select('showSVG');
+
+				//var circle = s.append('circle');
+				//const circle = g.append('circle');
+
+
+				const svgq = d3.select('showSVG');
+
+				const widthq = +svgq.attr('width');
+				const heightq = +svgq.attr('height');
+
+				const g = svgq.append('g')
+				.attr('transform', `translate(${widthq / 2}, ${heightq / 2})`);
+
+				
+
+				//.on('click', () => console.log("sss"));
+
+
+				//d3.selection.prototype.appendSVG = 
+    			//d3.selection.enter.prototype.appendSVG = function(svgCode) {
+       			//return this.select(function() {
+           		//return this.appendChild(document.importNode(new DOMParser()
+				//				.parseFromString('<svg xmlns="http://www.w3.org/2000/svg">' + SVGString + '</svg>', 'application/xml').documentElement.firstChild, true)); }); 
+				//};
+
+
+
+				//var svg = d3.selectAll('showSVG').appendHTML(showSVG);
+
+
+
+
+
+
+
+
+				
+				//const s = document.getElementById('showSVG');
+				//s.addEventListener('click', e => { console.log(e.target);});
+
 			} else if(guides == 'background'){
 				document.getElementById('guidesNone').checked = false;
 		  		document.getElementById('guidesBackground').checked = true;      
@@ -212,9 +271,10 @@
 			localStorage.setItem("prioNum", newNum);
 		}
 	</script>
+	-->
 </head>
 <body onload="init();">
-	<div id="showSVG" style="margin-left: 20px;"></div>
+	<svg id="showSVG" style="margin-left: 20px;"></svg>
 
 	<div>
 		<table>
@@ -238,6 +298,19 @@
 				      <input type="submit" value="Swap Rows">
 				      <script type="text/javascript">document.getElementById('rowsForm').onsubmit =  function(){rows()};</script>
 					</form>
+
+					<form id="toBeWorkedOn" action="editSVG.html" method="get" target="_self">
+						<table>
+							<tr>
+								<b>New swap</b>
+								
+							</tr>
+							
+						</table>
+						<input type="submit" value="New Rows">
+						<script type="text/javascript">document.getElementById('rowsForm').onsubmit =  function(){rows()};</script>
+					</form>
+
 				</td>
 				<td></td>
 				<td>
@@ -316,6 +389,5 @@
 	</p>
 	<input id="svgDownload" type="button" name="Download SVG" value="Download SVG" onClick="saveSVG();">
 
-	
 </body>
 </html>
