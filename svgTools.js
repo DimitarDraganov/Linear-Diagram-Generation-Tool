@@ -1145,7 +1145,7 @@ function swapRows(n1, n2){
 	//const svgD3 = d3.select('showSVG').innerHTML;
 
 
-	const svgD3 = d3.select('svg');
+	//const svgD3 = d3.select('svg');
 
 	//here work
 	var test = workSVG(svgStr);
@@ -1231,42 +1231,167 @@ function swapRows(n1, n2){
 
 
 //work
+function newSwapRows(n1, n2){
+	var linesArray = new Array();
+	var swapLines = new Array();
+	var svgStr = localStorage.getItem("svg");
+
+	var rowNumber = workSVG(svgStr, n1, n2);
+
+	var svgCode;
+	var num1 = rowNumber[0];
+	var num2 = rowNumber[1];
+	var swapNo = new Array(); 
+	var tempStr = "";
+	var y1 = "";
+	var y2 = "";
+	var start;
+	var end;
+	var size=0;
+
+	//const svgD3 = d3.select('showSVG').innerHTML;
 
 
-function workSVG(svgStr){
+	//const svgD3 = d3.select('svg');
+
+	//here work
+	
+
+	var sections = separateSVG(svgStr);
+	var lines = sections[1];
+	//LABEL SWAP START
+	//finds the index of the main line for each label
+	swapNo = getLineNo(lines);
+	//gets substring of y value for first line
+	start = lines[swapNo[num1]].indexOf('y=');
+	end = lines[swapNo[num1]].indexOf('fill=');
+	size = end - start;
+	y1 = lines[swapNo[num1]].substr(start, size);
+	//gets substring for y value for second line
+	start = lines[swapNo[num2]].indexOf('y=');
+	end = lines[swapNo[num2]].indexOf('fill=');
+	size = end - start;
+	y2 = lines[swapNo[num2]].substr(start, size);
+	//swap "y=" sections of the strings
+	tempStr = lines[swapNo[num1]].replace(y1,y2);
+	lines[swapNo[num1]] = tempStr;
+	tempStr = lines[swapNo[num2]].replace(y2,y1);
+	lines[swapNo[num2]] = tempStr;
+	//LABEL SWAP END
+	//LINES SWAP START
+	tempStr = "";
+	num1 = num1 + 1;
+	num2 = num2 + 1;
+	swapLines = getLines(lines);
+	//gets substring of y1 value for first line
+	start = swapLines[num1].indexOf('y1="');
+	end = swapLines[num1].indexOf('x2=');
+	size = end - start;
+	y1 = swapLines[num1].substr(start, size);
+	//gets substring for y1 value for second line
+	start = swapLines[num2].indexOf('y1="');
+	end = swapLines[num2].indexOf('x2=');
+	size = end - start;
+	y2 = swapLines[num2].substr(start, size);
+	//swap y1 values for both lines
+	tempStr = swapLines[num1].replace(RegExp(y1, "g"),y2);
+	swapLines[num1] = tempStr;
+	tempStr = swapLines[num2].replace(RegExp(y2, "g"),y1);
+	swapLines[num2] = tempStr;
+	//gets substring of y2 value for first line
+	start = swapLines[num1].indexOf('y2="');
+	end = swapLines[num1].indexOf(' stroke=');
+	size = end - start;
+	y1 = swapLines[num1].substr(start, size);
+	//gets substring for y2 value for second line
+	start = swapLines[num2].indexOf('y2="');
+	end = swapLines[num2].indexOf(' stroke=');
+	size = end - start;
+	y2 = swapLines[num2].substr(start, size);
+	//swap y2 values for both lines
+	tempStr = swapLines[num1].replace(RegExp(y1, "g"),y2);
+	swapLines[num1] = tempStr;
+	tempStr = swapLines[num2].replace(RegExp(y2, "g"),y1);
+	swapLines[num2] = tempStr;
+	lines = swapLines[num1];
+	swapLines[num1] = swapLines[num2]
+	swapLines[num2] = lines;
+	swapLines.shift();
+	//LINES SWAP END
+	//sets the new value of sections[1] as the changes lines
+	sections[1] = swapLines;
+	//rebuilds lines array
+	linesArray = rebuildLinesArray(sections);
+	//rebuilds svgCode
+	svgCode = rebuildSvg(linesArray);
+	//alert(svgCode);
+	//puts code into local storage to be redrawn by page.
+	localStorage.setItem("svg", svgCode);
+
+	
+	//localStorage.setItem("svg", svgD3);
+
+
+}
+
+function workSVG(svgStr, n1, n2){
 	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
 	var sections = new Array();
 
 	var workArray = new Array();
 	var value1 = "dog";
 
-	var value1Number;
+	var rowNumber = new Array();;
 
 	var svgCode = svgStr;
-	var lastGuide = 0;
 	linesArray = splitSvg(svgCode);
 	linesArray.shift();
 	//finds where last guide line is drawn.
 	for(var i = 0; i < linesArray.length; i++){
-		if((linesArray[i].includes("class="))){
+		if((linesArray[i].includes("text id="))){
 			workArray.push(linesArray[i]);
 		}
 	}
 
 	for(var i = 0; i < workArray.length; i++){
-		if (workArray[i].includes(value1)){
-			value1Number = i;
+		if (workArray[i].includes(n1) || workArray[i].includes(n2)){
+			rowNumber.push(i);
 		}
 	}
 
-
-
-	return sections;
+	return rowNumber;
 }
 
 //work
 
 
+// function workSVG(svgStr){
+// 	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
+// 	var sections = new Array();
+
+// 	var workArray = new Array();
+// 	var value1 = "dog";
+
+// 	var rowNumber;
+
+// 	var svgCode = svgStr;
+// 	linesArray = splitSvg(svgCode);
+// 	linesArray.shift();
+// 	//finds where last guide line is drawn.
+// 	for(var i = 0; i < linesArray.length; i++){
+// 		if((linesArray[i].includes("text id="))){
+// 			workArray.push(linesArray[i]);
+// 		}
+// 	}
+
+// 	for(var i = 0; i < workArray.length; i++){
+// 		if (workArray[i].includes(value1)){
+// 			rowNumber = i;
+// 		}
+// 	}
+
+// 	return rowNumber;
+// }
 
 
 //Function to separate elements of a diagram
