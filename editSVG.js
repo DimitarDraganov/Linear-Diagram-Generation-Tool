@@ -118,10 +118,19 @@ function newRows() {
     newSwapRows(selectedItems[0], selectedItems[1]);//see SVGTools.js
 }
 
+function deleteRow() {
+    newDeleteRow(selectedItems[0]);
+}
+
 //Function used to pass values to swap cols function (from form)
 function cols() {
     swapCols(document.getElementById('col1').value, document.getElementById('col2').value);//see SVGTools.js
 }
+
+function upSwap() {
+    newDeleteRow(selectedItems[0]);
+}
+
 //Function for reording diagram with minimum line spaces
 function reorder() {
     orderGaps();//see SVGTools.js

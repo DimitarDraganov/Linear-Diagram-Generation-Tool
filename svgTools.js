@@ -1146,9 +1146,6 @@ function swapRows(n1, n2){
 
 
 	//const svgD3 = d3.select('svg');
-
-	//here work
-	var test = workSVG(svgStr);
 	 
 
 
@@ -1236,7 +1233,7 @@ function newSwapRows(n1, n2){
 	var swapLines = new Array();
 	var svgStr = localStorage.getItem("svg");
 
-	var rowNumber = workSVG(svgStr, n1, n2);
+	var rowNumber = findRowNumbers(svgStr, n1, n2);
 
 	var svgCode;
 	var num1 = rowNumber[0];
@@ -1334,12 +1331,11 @@ function newSwapRows(n1, n2){
 
 }
 
-function workSVG(svgStr, n1, n2){
+function findRowNumbers(svgStr, n1, n2){
 	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
 	var sections = new Array();
 
 	var workArray = new Array();
-	var value1 = "dog";
 
 	var rowNumber = new Array();;
 
@@ -1393,6 +1389,75 @@ function workSVG(svgStr, n1, n2){
 // 	return rowNumber;
 // }
 
+
+function newDeleteRow(n1){
+	var linesArray = new Array();
+	var swapLines = new Array();
+	var svgStr = localStorage.getItem("svg");
+
+	var rowNumber = findRowNumber(svgStr, n1);
+
+	var svgCode;
+	var num1 = rowNumber[0];
+	var swapNo = new Array(); 
+	
+
+	var sections = separateSVG(svgStr);
+	var lines = sections[1];
+
+
+	//LABEL SWAP START
+	//finds the index of the main line for each label
+	swapNo = getLineNo(lines);
+
+	var currentLines = new Array();
+	swapLines = getLines(lines);
+
+	for (var i = 0; i <= swapNo.length - 1; i++){
+		if(i != num1){	
+			proxyLines.push(swapLines[i + 1])
+		}
+	}
+	
+	sections[1] = currentLines;
+
+	
+
+
+
+
+
+	//rebuilds lines array
+	linesArray = rebuildLinesArray(sections);
+	//rebuilds svgCode
+	svgCode = rebuildSvg(linesArray);
+	//puts code into local storage to be redrawn by page.
+	localStorage.setItem("svg", svgCode);
+}
+
+function findRowNumber(svgStr, n1){
+	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
+	var workArray = new Array();
+	var rowNumber = new Array();;
+
+	var svgCode = svgStr;
+	linesArray = splitSvg(svgCode);
+	linesArray.shift();
+	//finds where last guide line is drawn.
+	for(var i = 0; i < linesArray.length; i++){
+		if((linesArray[i].includes("text id="))){
+			workArray.push(linesArray[i]);
+		}
+	}
+
+	for(var i = 0; i < workArray.length; i++){
+		if (workArray[i].includes(n1)){
+			rowNumber.push(i);
+		}
+	}
+
+	return rowNumber;
+}
 
 //Function to separate elements of a diagram
 function getLines(input){

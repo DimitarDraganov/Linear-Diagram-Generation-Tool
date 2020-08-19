@@ -302,14 +302,25 @@
 					<form id="newRowsForm" action="editSVG.html" method="get" target="_self">
 						<table>
 							<tr>
-								<b>New swap</b>
-								
+								<b>New swap</b>								
 							</tr>
 							
 						</table>
 						<input type="submit" value="New Rows">
 						<script type="text/javascript">document.getElementById('newRowsForm').onsubmit =  function(){newRows()};</script>
 					</form>
+
+					<form id="deleteRowForm" action="editSVG.html" method="get" target="_self">
+						<table>
+							<tr>
+								<b>New delete</b>
+							</tr>
+
+						</table>
+						<input type="submit" value="Delete row">
+						<script type="text/javascript">document.getElementById('deleteRowForm').onsubmit =  function(){deleteRow()};</script>
+					</form>
+
 
 				</td>
 				<td></td>
@@ -330,6 +341,17 @@
 					    </table>
 					    <input type="submit" value="Swap Columns">
 					    <script type="text/javascript">document.getElementById('colsForm').onsubmit =  function(){cols()};</script>
+					</form>
+
+
+					<form  id="upRowSwap" action="editSVG.html" method="get" target="_self">
+						<table>
+					        <tr>
+				    		<b>Move row up: </b>
+					    	</tr>
+					    </table>
+					    <input type="submit" value="UP">
+					    <script type="text/javascript">document.getElementById('upSwap').onsubmit =  function(){upSwap()};</script>
 					</form>
 				</td>
 			</tr>

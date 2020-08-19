@@ -1,7 +1,7 @@
 /**
  * @author <a href="mailto:P.J.Rodgers@kent.ac.uk">Peter Rodgers</a>
  */
- 
+
 	var xSpacing = 25;
 	var ySpacing = 35;
 
@@ -519,7 +519,16 @@ var lineSharing = false;
 						lineWidth = ySpacing;
 					}
 
-					nextSVG= '  <line class="'+globalContours[i]+'" x1="'+x1+'" y1="'+yPos+'" x2="'+x2+'" y2="'+yPos+'" stroke="'+color+'" stroke-width="'+lineWidth+'" />'+"\n";
+					nextSVG= '  <line id="'+globalContours[i]+'" class="'+globalContours[i]+'" x1="'+x1+'" y1="'+yPos+'" x2="'+x2+'" y2="'+yPos+'" stroke="'+color+'" stroke-width="'+lineWidth+'" />'+"\n";
+
+					// const hashSVG = type => ({
+
+					// });
+
+					//nextSVG.onclick = funcHighlightOn(globalContours[i]);
+
+					//nextSVG.onclick = funcHighlightOn(alert("wow"));
+
 
 					allOverlapSVG += nextSVG;
 				}
