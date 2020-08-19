@@ -128,7 +128,86 @@ function cols() {
 }
 
 function upSwap() {
-    newDeleteRow(selectedItems[0]);
+    var currentSelection = localStorage.getItem("selectedLabel");
+
+    var svgString = localStorage.getItem("svg");
+    var sections = separateSVG(svgString);
+    var lines = sections[1];
+    var swapNo = getLineNo(lines);
+    var labels = getLabels(lines, swapNo);
+
+
+
+    // if(currentSelection != selectedItems[0] && currentSelection != 'undefined'){
+    //     localStorage.setItem("selectedLabel", selectedItems[0]);
+    //     upRowSwap(selectedItems[0], labels); 
+
+    // }
+    // else{
+    //     upRowSwap(currentSelection, labels);
+    // }
+
+    if(currentSelection === selectedItems[0]){
+        upRowSwap(currentSelection, labels);
+    }
+    if(selectedItems[0] === undefined){
+        upRowSwap(currentSelection, labels);
+    }
+    else{
+        localStorage.setItem("selectedLabel", selectedItems[0]);
+        upRowSwap(selectedItems[0], labels); 
+        
+    }
+
+    // upRowSwap(currentSelection, labels);
+    
+}
+
+
+// function upSwap() {
+//     var svgString = localStorage.getItem("svg");
+//     var sections = separateSVG(svgString);
+//     var lines = sections[1];
+//     var swapNo = getLineNo(lines);
+//     var labels = getLabels(lines, swapNo);
+
+//     upRowSwap(selectedItems[0], labels);
+// }
+
+function downSwap() {
+    var currentSelection = localStorage.getItem("selectedLabel");
+
+    var svgString = localStorage.getItem("svg");
+    var sections = separateSVG(svgString);
+    var lines = sections[1];
+    var swapNo = getLineNo(lines);
+    var labels = getLabels(lines, swapNo);
+
+
+
+    // if(currentSelection != selectedItems[0] && currentSelection != 'undefined'){
+    //     localStorage.setItem("selectedLabel", selectedItems[0]);
+    //     upRowSwap(selectedItems[0], labels); 
+
+    // }
+    // else{
+    //     upRowSwap(currentSelection, labels);
+    // }
+
+    if(currentSelection === selectedItems[0]){
+        downRowSwap(currentSelection, labels);
+    }
+    if(selectedItems[0] === undefined){
+        downRowSwap(currentSelection, labels);
+    }
+    else{
+        localStorage.setItem("selectedLabel", selectedItems[0]);
+        downRowSwap(selectedItems[0], labels); 
+        
+    }
+
+    // upRowSwap(currentSelection, labels);
+    
 }
 
 //Function for reording diagram with minimum line spaces

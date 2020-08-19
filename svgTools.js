@@ -1226,6 +1226,44 @@ function swapRows(n1, n2){
 
 }
 
+function upRowSwap(n1, labels){
+
+	var swapNum;
+
+	if(n1 != labels[0]){
+
+		for(var i = 0; i < labels.length; i++){
+
+			//if(n1 != labels[length[0]]){
+				if(labels[i].includes(n1)){
+					swapNum = labels[i - 1];
+				}
+		}
+		newSwapRows(n1, swapNum);
+	}
+
+
+}
+
+
+function downRowSwap(n1, labels){
+
+	var swapNum;
+
+	if(n1 != labels[length - 1]){
+
+		for(var i = 0; i < labels.length; i++){
+
+			//if(n1 != labels[length[0]]){
+				if(labels[i].includes(n1)){
+					swapNum = labels[i + 1];
+				}
+		}
+		newSwapRows(n1, swapNum);
+	}
+
+
+}
 
 //work
 function newSwapRows(n1, n2){
@@ -1422,9 +1460,6 @@ function newDeleteRow(n1){
 	sections[1] = currentLines;
 
 	
-
-
-
 
 
 	//rebuilds lines array

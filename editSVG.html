@@ -343,16 +343,38 @@
 					    <script type="text/javascript">document.getElementById('colsForm').onsubmit =  function(){cols()};</script>
 					</form>
 
-
-					<form  id="upRowSwap" action="editSVG.html" method="get" target="_self">
+					<form id="upRowSwap" action="editSVG.html" method="get" target="_self">
 						<table>
 					        <tr>
 				    		<b>Move row up: </b>
 					    	</tr>
 					    </table>
-					    <input type="submit" value="UP">
-					    <script type="text/javascript">document.getElementById('upSwap').onsubmit =  function(){upSwap()};</script>
+					    <input type="submit" value="↑">
+					    <script type="text/javascript">document.getElementById('upRowSwap').onsubmit =  function(){upSwap()};</script>
 					</form>
+
+					<form id="upLeftSwap" action="editSVG.html" method="get" target="_self">
+						<table>
+					        <tr>
+				    		<b>Move row up: </b>
+					    	</tr>
+					    </table>
+					    <input type="submit" value="Left">
+					    <script type="text/javascript">document.getElementById('upLeftSwap').onsubmit =  function(){leftSwap()};</script>
+					</form>
+					
+
+					<form id="downRowSwap" action="editSVG.html" method="get" target="_self">
+						<table>
+					        <tr>
+				    		<b>Move row down: </b>
+					    	</tr>
+					    </table>
+					    <input type="submit" value="↓">
+					    <script type="text/javascript">document.getElementById('downRowSwap').onsubmit =  function(){downSwap()};</script>
+					</form>
+		
+
 				</td>
 			</tr>
 		</table>
