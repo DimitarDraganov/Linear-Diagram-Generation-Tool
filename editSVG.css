@@ -1,0 +1,13 @@
+/* svg:hover {
+    background-color: #3e8e41;
+  } */
+
+
+text:hover {
+    fill: #3e8e41;
+  }
+
+
+  /* svg:hover text {
+    fill:green;
+  } */

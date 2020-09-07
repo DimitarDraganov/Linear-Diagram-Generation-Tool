@@ -136,17 +136,6 @@ function upSwap() {
     var swapNo = getLineNo(lines);
     var labels = getLabels(lines, swapNo);
 
-
-
-    // if(currentSelection != selectedItems[0] && currentSelection != 'undefined'){
-    //     localStorage.setItem("selectedLabel", selectedItems[0]);
-    //     upRowSwap(selectedItems[0], labels); 
-
-    // }
-    // else{
-    //     upRowSwap(currentSelection, labels);
-    // }
-
     if(currentSelection === selectedItems[0]){
         upRowSwap(currentSelection, labels);
     }
@@ -158,21 +147,8 @@ function upSwap() {
         upRowSwap(selectedItems[0], labels); 
         
     }
-
-    // upRowSwap(currentSelection, labels);
     
 }
-
-
-// function upSwap() {
-//     var svgString = localStorage.getItem("svg");
-//     var sections = separateSVG(svgString);
-//     var lines = sections[1];
-//     var swapNo = getLineNo(lines);
-//     var labels = getLabels(lines, swapNo);
-
-//     upRowSwap(selectedItems[0], labels);
-// }
 
 function downSwap() {
     var currentSelection = localStorage.getItem("selectedLabel");
@@ -182,17 +158,6 @@ function downSwap() {
     var lines = sections[1];
     var swapNo = getLineNo(lines);
     var labels = getLabels(lines, swapNo);
-
-
-
-    // if(currentSelection != selectedItems[0] && currentSelection != 'undefined'){
-    //     localStorage.setItem("selectedLabel", selectedItems[0]);
-    //     upRowSwap(selectedItems[0], labels); 
-
-    // }
-    // else{
-    //     upRowSwap(currentSelection, labels);
-    // }
 
     if(currentSelection === selectedItems[0]){
         downRowSwap(currentSelection, labels);
@@ -205,9 +170,50 @@ function downSwap() {
         downRowSwap(selectedItems[0], labels); 
         
     }
+}
 
-    // upRowSwap(currentSelection, labels);
-    
+function leftSwap() {
+    var currentSelection = localStorage.getItem("selectedLabel");
+
+    var svgString = localStorage.getItem("svg");
+    var sections = separateSVG(svgString);
+    var lines = sections[1];
+    var swapNo = getLineNo(lines);
+    var labels = getLabels(lines, swapNo);
+
+    if(currentSelection === selectedItems[0]){
+        leftRowSwap(currentSelection, labels);
+    }
+    if(selectedItems[0] === undefined){
+        leftRowSwap(currentSelection, labels);
+    }
+    else{
+        localStorage.setItem("selectedLabel", selectedItems[0]);
+        leftRowSwap(selectedItems[0], labels); 
+        
+    }   
+}
+
+function rightSwap() {
+    var currentSelection = localStorage.getItem("selectedLabel");
+
+    var svgString = localStorage.getItem("svg");
+    var sections = separateSVG(svgString);
+    var lines = sections[1];
+    var swapNo = getLineNo(lines);
+    var labels = getLabels(lines, swapNo);
+
+    if(currentSelection === selectedItems[0]){
+        rightRowSwap(currentSelection, labels);
+    }
+    if(selectedItems[0] === undefined){
+        rightRowSwap(currentSelection, labels);
+    }
+    else{
+        localStorage.setItem("selectedLabel", selectedItems[0]);
+        rightRowSwap(selectedItems[0], labels); 
+        
+    }   
 }
 
 //Function for reording diagram with minimum line spaces
@@ -236,6 +242,11 @@ function changeGuides() {
         localStorage.setItem("guides", guides);
     }
 }
+
+function setRowPriority() {
+    setPriority(selectedItems[0]);
+}
+
 //Function used to reorder diagram based on priority lines.
 function orderForce() {
     var svgCode = localStorage.getItem("svg");

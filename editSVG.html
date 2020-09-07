@@ -5,6 +5,8 @@
 	<title>SVG EDITOR</title>
 
 	<link rel="stylesheet" href="index.css">
+
+	<link rel="stylesheet" href="editSVG.css">
 	<!--
 	<script src="https://unpkg.com/d3@5.9.2/dist/d3.min.js"></script>
 	-->
@@ -274,7 +276,7 @@
 	-->
 </head>
 <body onload="init();">
-	<svg id="showSVG" style="margin-left: 20px;"></svg>
+	<div id="showSVG" style="margin-left: 20px;"></div>
 
 	<div>
 		<table>
@@ -321,6 +323,17 @@
 						<script type="text/javascript">document.getElementById('deleteRowForm').onsubmit =  function(){deleteRow()};</script>
 					</form>
 
+					<form id="SetPriorityForm" action="editSVG.html" method="get" target="_self">
+						<table>
+							<tr>
+								<b>Set priority</b>
+							</tr>
+
+						</table>
+						<input type="submit" value="Set Row priority">
+						<script type="text/javascript">document.getElementById('SetPriorityForm').onsubmit =  function(){setRowPriority()};</script>
+					</form>
+
 
 				</td>
 				<td></td>
@@ -353,16 +366,25 @@
 					    <script type="text/javascript">document.getElementById('upRowSwap').onsubmit =  function(){upSwap()};</script>
 					</form>
 
-					<form id="upLeftSwap" action="editSVG.html" method="get" target="_self">
+					<form id="horizontalLeftSwap" action="editSVG.html" method="get" target="_self">
 						<table>
 					        <tr>
-				    		<b>Move row up: </b>
+				    		<b>Move row left: </b>
 					    	</tr>
 					    </table>
 					    <input type="submit" value="Left">
-					    <script type="text/javascript">document.getElementById('upLeftSwap').onsubmit =  function(){leftSwap()};</script>
+					    <script type="text/javascript">document.getElementById('horizontalLeftSwap').onsubmit =  function(){leftSwap()};</script>
 					</form>
 					
+					<form id="horizontalRightSwap" action="editSVG.html" method="get" target="_self">
+						<table>
+					        <tr>
+				    		<b>Move row right: </b>
+					    	</tr>
+					    </table>
+					    <input type="submit" value="Right">
+					    <script type="text/javascript">document.getElementById('horizontalRightSwap').onsubmit =  function(){rightSwap()};</script>
+					</form>
 
 					<form id="downRowSwap" action="editSVG.html" method="get" target="_self">
 						<table>

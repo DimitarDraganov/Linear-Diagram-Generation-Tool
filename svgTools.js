@@ -209,6 +209,113 @@ function sortForce(arr){
 	redrawOverlaps(rowOverlaps, spaceArray, sections, labels, xStartLine, spaceArray, yStartLbl, yStartLine, ySpacing, xPosArray, strokeArray, colNo);
 }
 
+function setPriority(arr){
+	var svgCode = localStorage.getItem("svg");
+
+
+	var names = findRowNumber(svgCode, arr);
+
+
+	var n1 = num1-1;
+	var n2 = num2-1;
+	var labels = new Array();
+	var rowOverlaps = new Array();
+	var swapNo = new Array();
+	var colOverLaps = new Array();
+	var strokeArray = new Array();
+	var xPosArray = new Array();
+	var tempArr = new Array();
+	var tempRow = new Array();
+	var trueRow = new Array();
+	var falseRow = new Array();
+	var tempGap;
+	var tempCols;
+	var gaps;
+
+
+	//var names = arr;
+
+
+	//variables for y axis
+	var yStartLbl;
+	var yStartLine;
+	var ySpacing;
+	//variables for x axis
+	var spaceArray = new Array();
+	var xStartEnd;
+	var xStartLine;
+	var xSpacing;
+	//temp values
+	var start;
+	var end;
+	var size;
+	var tempStr;
+	var colNo = -1;
+	var sections = separateSVG(svgCode);
+	//GET Y AXIS VALUES
+	var lines = sections[1];
+	//gets label y start value
+	yStartLbl = getYStart(lines);
+	//gets line y start value
+	yStartLine = getYStartLine(lines);
+	//gets y axis spacing
+	swapNo = getLineNo(lines);
+	ySpacing = getYAxisSpace(lines, yStartLbl, swapNo);
+	//GET X AXIS VALUES
+	lines = sections[0];
+	//gets starting x value
+	xStartLine = getXLineStart(lines);
+	//gets x End value
+	xEnd = getXLineEnd(lines);
+	//gets spacing of columns
+	var xSpacing2;
+	start = lines[1].indexOf("x1=")+4;	
+	end = lines[1].indexOf("y1=")-2;
+	size = end - start;
+	tempStr = parseInt(lines[1].substr(start, size));
+	xSpacing = tempStr - xStartLine;
+	//loop to find spacing of each column.
+	for(var i = 1; i < lines.length; i++){
+		start = lines[i].indexOf("x1=")+4;	
+		end = lines[i].indexOf("y1=")-2;
+		size = end - start;
+		tempStr = parseInt(lines[i].substr(start, size));
+		xSpacing2 = tempStr - xStartLine;
+		spaceArray.push(xSpacing2-xSpacing);
+		xSpacing = xSpacing2;
+		colNo++;
+	}
+	//removes first index of array (blank entry)
+	spaceArray.shift();
+	//gets array of labels
+	labels = getLabels(sections[1], swapNo);
+	strokeArray = getStrokes(sections[1], swapNo);
+	xPosArray = getXPos(sections[1], swapNo);
+	//gets populated columns for each row
+	lines = sections[1];
+	lines = getLines(lines);
+	lines.shift();
+	for (var i = 0; i < lines.length; i++) {
+		rowOverlaps.push(rowPop(lines[i], colNo, spaceArray, xStartLine));
+	}
+	//transpose rows to columns
+	colOverLaps = transpose(rowOverlaps);
+	//Populates tempArr to pass data needed to sortDForce function
+	tempArr = [];
+	tempArr.push(labels);
+	tempArr.push(colOverLaps);
+	tempArr.push(spaceArray);
+	tempArr.push(names);
+	holding = sortDForce(tempArr);
+	//returns columns array and spaces
+	colOverLaps = holding[1];
+	spaceArray = holding[2];
+	//transpose back to rows
+	rowOverlaps = transpose(colOverLaps);
+	//redraws with new diagram info.
+	redrawOverlaps(rowOverlaps, spaceArray, sections, labels, xStartLine, spaceArray, yStartLbl, yStartLine, ySpacing, xPosArray, strokeArray, colNo);
+}
+
 //sortDForce function
 function sortDForce(arr){
 	var holding = arr;
@@ -1143,8 +1250,6 @@ function swapRows(n1, n2){
 	var size=0;
 
 	//const svgD3 = d3.select('showSVG').innerHTML;
-
-
 	//const svgD3 = d3.select('svg');
 	 
 
@@ -1227,7 +1332,6 @@ function swapRows(n1, n2){
 }
 
 function upRowSwap(n1, labels){
-
 	var swapNum;
 
 	if(n1 != labels[0]){
@@ -1241,13 +1345,9 @@ function upRowSwap(n1, labels){
 		}
 		newSwapRows(n1, swapNum);
 	}
-
-
 }
 
-
 function downRowSwap(n1, labels){
-
 	var swapNum;
 
 	if(n1 != labels[length - 1]){
@@ -1261,8 +1361,278 @@ function downRowSwap(n1, labels){
 		}
 		newSwapRows(n1, swapNum);
 	}
+}
+
+function leftRowSwap(n1, labels)
+{
+	setPriority(n1);
+
+	var svgCode = localStorage.getItem("svg");
+
+	var sections = separateSVG(svgCode);
+
+	var rowNumber = findRowNumber(svgCode, n1);
+
+	var num1 = rowNumber[0];
 
 
+	var xStartEnd;
+	var xStartLine;
+	var SpaceBetweenCol;
+
+	var colNum;
+
+
+	
+
+
+	//GET X AXIS VALUES
+	linesLab = sections[0];
+	//gets starting x value
+	xStartLine = getXLineStart(linesLab);
+	//gets x End value
+	xStartEnd = getXLineEnd(linesLab);
+	//gets spacing of columns
+
+	// var xSpacing2;
+	// start = lines[0].indexOf("x1=")+4;	
+	// end = lines[0].indexOf("y1=")-2;
+	// size = end - start;
+	// tempStr = parseInt(lines[0].substr(start, size));
+	// xSpacing = tempStr - xStartLine;
+	// for(var i = 1; i < lines.length; i++){
+	// 	start = lines[i].indexOf("x1=")+4;	
+	// 	end = lines[i].indexOf("y1=")-2;
+	// 	size = end - start;
+	// 	tempStr = parseInt(lines[i].substr(start, size));
+	// 	xSpacing2 = tempStr - xStartLine;
+	// 	spaceArray.push(xSpacing2-xSpacing);
+	// 	xSpacing = xSpacing2;
+	// 	colNo++;
+	// }
+
+
+
+	colNum = linesLab.length - 2;
+
+	SpaceBetweenCol = (xStartEnd - xStartLine) / colNum;
+
+
+	var lines = sections[1];
+
+	swapNo = getLineNo(lines);
+
+	swapLines = getLines(lines);
+
+	var selectedRow = num1 + 1;
+
+	//gets substring of y1 value for first line
+	start = swapLines[selectedRow].indexOf('x1="');
+	end = swapLines[selectedRow].indexOf('y1=');
+	//size = end - start;
+	//y1 = swapLines[rowNumber].substr(start, size);
+	
+	size = end - start;
+
+
+	y1 = swapLines[selectedRow].substr(start + 4, size - 6);
+
+
+	var integer = parseInt(y1, 10);
+
+	// for(var i = 1; i < lines.length; i++){
+	// 	start = lines[i].indexOf("x1=")+4;	
+	// 	end = lines[i].indexOf("y1=")-2;
+	// 	size = end - start;
+	// 	tempStr = parseInt(lines[i].substr(start, size));
+	// 	xSpacing2 = tempStr - xStartLine;
+	// 	spaceArray.push(xSpacing2-xSpacing);
+	// 	xSpacing = xSpacing2;
+	// 	colNo++;
+	// }
+
+
+	// function getLineNo(input){
+	// 	var swapNo = new Array();
+	// 	var lines = input;
+	// 	for(var i = 0; i< lines.length; i++){
+	// 		if(lines[i].includes("text id=")){
+	// 			swapNo.push(i);
+	// 		}
+	// 	}
+	// 	return swapNo;
+	// }
+
+	if (xStartLine !== integer)
+	{
+		//mirror rows
+		for (var i = 0; i < lines.length; i++) {
+
+			if(lines[i].includes("line ")){	
+
+				start = lines[i].indexOf('x1="');
+				end = lines[i].indexOf('y1=');
+				size = end - start;
+
+				xValue1 = parseInt(lines[i].substr(start + 4, size - 6));
+
+				start = lines[i].indexOf('x2="');
+				end = lines[i].indexOf('y2=');
+				size = end - start;
+
+				xValue2 = parseInt(lines[i].substr(start + 4, size - 6));
+
+
+				newXvalue = (xStartEnd + xStartLine) - xValue2;
+				tempStr = lines[i].replace(xValue1,newXvalue);
+				lines[i] = tempStr;
+
+				newXvalue = (xStartEnd - xValue1) + xStartLine;
+				tempStr = lines[i].replace(xValue2,newXvalue);
+				lines[i] = tempStr;
+			}
+		}
+		sections[1] = lines;
+		linesArray = rebuildLinesArray(sections);
+		svgCode = rebuildSvg(linesArray);
+		localStorage.setItem("svg", svgCode);
+	}
+}
+
+
+function rightRowSwap(n1, labels)
+{
+	setPriority(n1);
+
+	var svgCode = localStorage.getItem("svg");
+
+	var sections = separateSVG(svgCode);
+
+	var rowNumber = findRowNumber(svgCode, n1);
+
+	var num1 = rowNumber[0];
+
+
+	var xStartEnd;
+	var xStartLine;
+	var SpaceBetweenCol;
+
+	var colNum;
+
+
+	
+
+
+	//GET X AXIS VALUES
+	linesLab = sections[0];
+	//gets starting x value
+	xStartLine = getXLineStart(linesLab);
+	//gets x End value
+	xStartEnd = getXLineEnd(linesLab);
+	//gets spacing of columns
+
+	// var xSpacing2;
+	// start = lines[0].indexOf("x1=")+4;	
+	// end = lines[0].indexOf("y1=")-2;
+	// size = end - start;
+	// tempStr = parseInt(lines[0].substr(start, size));
+	// xSpacing = tempStr - xStartLine;
+	// for(var i = 1; i < lines.length; i++){
+	// 	start = lines[i].indexOf("x1=")+4;	
+	// 	end = lines[i].indexOf("y1=")-2;
+	// 	size = end - start;
+	// 	tempStr = parseInt(lines[i].substr(start, size));
+	// 	xSpacing2 = tempStr - xStartLine;
+	// 	spaceArray.push(xSpacing2-xSpacing);
+	// 	xSpacing = xSpacing2;
+	// 	colNo++;
+	// }
+
+
+
+	colNum = linesLab.length - 2;
+
+	SpaceBetweenCol = (xStartEnd - xStartLine) / colNum;
+
+
+	var lines = sections[1];
+
+	swapNo = getLineNo(lines);
+
+	swapLines = getLines(lines);
+
+	var selectedRow = num1 + 1;
+
+	//gets substring of y1 value for first line
+	start = swapLines[selectedRow].indexOf('x2="');
+	end = swapLines[selectedRow].indexOf('y2=');
+	//size = end - start;
+	//y1 = swapLines[rowNumber].substr(start, size);
+	
+	size = end - start;
+
+
+	y2 = swapLines[selectedRow].substr(start + 4, size - 6);
+
+
+	var integer = parseInt(y2, 10);
+
+	// for(var i = 1; i < lines.length; i++){
+	// 	start = lines[i].indexOf("x1=")+4;	
+	// 	end = lines[i].indexOf("y1=")-2;
+	// 	size = end - start;
+	// 	tempStr = parseInt(lines[i].substr(start, size));
+	// 	xSpacing2 = tempStr - xStartLine;
+	// 	spaceArray.push(xSpacing2-xSpacing);
+	// 	xSpacing = xSpacing2;
+	// 	colNo++;
+	// }
+
+
+	// function getLineNo(input){
+	// 	var swapNo = new Array();
+	// 	var lines = input;
+	// 	for(var i = 0; i< lines.length; i++){
+	// 		if(lines[i].includes("text id=")){
+	// 			swapNo.push(i);
+	// 		}
+	// 	}
+	// 	return swapNo;
+	// }
+
+	if (xStartEnd !== integer)
+	{
+		//mirror rows
+		for (var i = 0; i < lines.length; i++) {
+
+			if(lines[i].includes("line ")){	
+
+				start = lines[i].indexOf('x1="');
+				end = lines[i].indexOf('y1=');
+				size = end - start;
+
+				xValue1 = parseInt(lines[i].substr(start + 4, size - 6));
+
+				start = lines[i].indexOf('x2="');
+				end = lines[i].indexOf('y2=');
+				size = end - start;
+
+				xValue2 = parseInt(lines[i].substr(start + 4, size - 6));
+
+				newXvalue = (xStartEnd + xStartLine) - xValue2;
+				tempStr = lines[i].replace(xValue1,newXvalue);
+				lines[i] = tempStr;
+
+				newXvalue = (xStartEnd - xValue1) + xStartLine;
+				tempStr = lines[i].replace(xValue2,newXvalue);
+				lines[i] = tempStr;	
+			}
+		}
+		sections[1] = lines;
+		linesArray = rebuildLinesArray(sections);
+		svgCode = rebuildSvg(linesArray);
+		localStorage.setItem("svg", svgCode);
+	}
 }
 
 //work
