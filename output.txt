@@ -1,0 +1,16 @@
+{"level":"debug"}
+{"level":"debug"}
+{"level":"debug"}
+{"level":"debug"}
+{"message":"mammal","level":"debug"}
+debug: pet
+debug: Swap columns
+debug: Swap columns
+debug: Swap columns
+debug: Swap columnselements selected:1and3
+debug: Swap columnselements selected:5and4
+----------------------------
+debug: Swap row with lower row element selected: mammal
+debug: Swap row with upper row element selected: mammal
+debug: Swap row with upper row element selected: mammal
+debug: Swap columns elements selected: 1 and 3

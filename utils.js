@@ -575,6 +575,22 @@ var lineSharing = false;
 			svgString += allGuideSVG+allOverlapSVG; // otherwise guides behind 
 		}
 
+		
+		if(orientation == "horizontal") { // just don't clip if vertical, might have to fix this later
+			for(var i=1; i < globalDistances.length-1; i=i+1) {
+				var distance1 = globalDistances[i]+extraSpaceForLabel;
+				var distance2 = globalDistances[i+1]+extraSpaceForLabel;
+				var circleHeight = (parseInt(height, 10)) - 10;
+				var radios = (distance1 + distance2) / 2;
+				var circleSVG = '  <circle id="'+i+'" cx="'+radios+'" cy="'+circleHeight+'" r="6" stroke="gray" stroke-width="3" fill="gray" />'+"\n";
+				
+				svgString += circleSVG;
+
+			}
+			
+		}
+
+
 		if(orientation == "horizontal") { // just don't clip if vertical, might have to fix this later
 			svgString += '  <clipPath id="clip1"> <rect x="0" y="0" width="'+(xSpacing+extraSpaceForLabel-5)+'" height="'+height+'"/> </clipPath>'+"\n";
 		}

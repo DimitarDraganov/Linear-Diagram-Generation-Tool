@@ -1,5 +1,8 @@
 //import { select } from 'editSVG.html';
 //Function to split svg String into seperate lines
+//import java.io.File;
+
+
 function splitSvg(svgStr){
 	var linesArray = new Array();
 	var svgCode = svgStr;
@@ -926,6 +929,102 @@ function swapCols(n1, n2){
 		
 	svgCode = redrawOverlaps(rowOverlaps, spaceArray, sections, labels, xStartLine, spaceArray, yStartLbl, yStartLine, ySpacing, xPosArray, strokeArray, colNo);
 }
+
+function newSwapCols(n1, n2){
+
+	var diagramType = 'Swap columns';
+
+
+	logInteractionsTwoElements(diagramType, n1, n2)
+
+
+	var svgCode = localStorage.getItem("svg");
+	var labels = new Array();
+	var rowOverlaps = new Array();
+	var swapNo = new Array();
+	var colOverLaps = new Array();
+	var strokeArray = new Array();
+	var xPosArray = new Array();
+	var tempArr = new Array();
+	var num1 = n1-1;
+	var num2 = n2-1;
+	//variables for y axis
+	var yStartLbl;
+	var yStartLine;
+	var ySpacing;
+	//variables for x axis
+	var spaceArray = new Array();
+	var xStartEnd;
+	var xStartLine;
+	var xSpacing;
+	//temp values
+	var start;
+	var end;
+	var size;
+	var tempStr;
+	var colNo = -1;
+	var sections = separateSVG(svgCode);
+	//GET Y AXIS VALUES
+	var lines = sections[1];
+	//gets label y start value
+	yStartLbl = getYStart(lines);
+	//gets line y start value
+	yStartLine = getYStartLine(lines);
+	//gets y axis spacing
+	swapNo = getLineNo(lines);
+	ySpacing = getYAxisSpace(lines, yStartLbl, swapNo);
+	//GET X AXIS VALUES
+	lines = sections[0];
+	//gets starting x value
+	xStartLine = getXLineStart(lines);
+	//gets x End value
+	xEnd = getXLineEnd(lines);
+	//gets spacing of columns
+	var xSpacing2;
+	start = lines[0].indexOf("x1=")+4;	
+	end = lines[0].indexOf("y1=")-2;
+	size = end - start;
+	tempStr = parseInt(lines[0].substr(start, size));
+	xSpacing = tempStr - xStartLine;
+	//loop to find spacing of each column.
+	for(var i = 1; i < lines.length; i++){
+		start = lines[i].indexOf("x1=")+4;	
+		end = lines[i].indexOf("y1=")-2;
+		size = end - start;
+		tempStr = parseInt(lines[i].substr(start, size));
+		xSpacing2 = tempStr - xStartLine;
+		spaceArray.push(xSpacing2-xSpacing);
+		xSpacing = xSpacing2;
+		colNo++;
+	}
+	spaceArray.shift();
+	//gets array of labels
+	labels = getLabels(sections[1], swapNo);
+	strokeArray = getStrokes(sections[1], swapNo);
+	xPosArray = getXPos(sections[1], swapNo);
+	//gets populated columns for each row
+	lines = sections[1];
+	lines = getLines(lines);
+	lines.shift();
+	for (var i = 0; i < lines.length; i++) {
+		rowOverlaps.push(rowPop(lines[i], colNo, spaceArray, xStartLine));
+	}
+	//swaps columns
+	colOverLaps = transpose(rowOverlaps);
+	tempArr = colOverLaps[num1];
+	colOverLaps[num1] = colOverLaps[num2];
+	colOverLaps[num2] = tempArr;
+	//swaps spacing for columns
+	tempArr = spaceArray[num1];
+	spaceArray[num1] = spaceArray[num2];
+	spaceArray[num2] = tempArr;
+	//reverts array back to row by row;
+	rowOverlaps = transpose(colOverLaps);
+		
+	svgCode = redrawOverlaps(rowOverlaps, spaceArray, sections, labels, xStartLine, spaceArray, yStartLbl, yStartLine, ySpacing, xPosArray, strokeArray, colNo);
+}
+
+
 //Function to get x line end
 function getXLineEnd(arr){
 	var lines = arr;
@@ -1010,6 +1109,7 @@ function redrawOverlaps(rowsArray, colSpaces, sectionsArr, labelsArr, xStartLine
 	var rowOverlaps = rowsArray;
 	var spaceArray = colSpaces;
 	var sections = sectionsArr;
+	var sectionsWithOverlaps = sectionsArr[1];
 	var labels = labelsArr;
 	var xPos = labelPos;
 	var strokes = strokes;
@@ -1035,6 +1135,7 @@ function redrawOverlaps(rowsArray, colSpaces, sectionsArr, labelsArr, xStartLine
 		tempArr = rowOverlaps[i];
 		xStartLine = startVal;
 		xEnd = xStartLine + xSpacing[0];
+
 		if(tempArr[0]==true){
 			tempStr = 'line x1="'+xStartLine+'" y1="'+yStartLine+'" x2="'+xEnd+'" y2="'+yStartLine+'" stroke="'+strokes[i]+'" stroke-width="4" />'+"\n";
 		}
@@ -1062,12 +1163,38 @@ function redrawOverlaps(rowsArray, colSpaces, sectionsArr, labelsArr, xStartLine
 		tempStr="";
 		yStartLine = yStartLine + ySpacing;
 		yStartLbl = yStartLbl + ySpacing;
+
+
+
+
 	}
+
 
 	newStart = changeGuide(sections[0], spaceArray, colNo);
 	
 	sections[0] = newStart;
 	sections[1] = tempStrArr;
+
+
+
+	var sectionsNew = new Array();
+
+	//linesArrayNew = splitSvg(svgCode);
+	//linesArrayNew.shift();
+	for(var y = 0; y < sectionsWithOverlaps.length; y++){
+		if(sectionsWithOverlaps[y].includes("circle")){
+
+			sections[1].push(sectionsWithOverlaps[y]);
+		}
+	}
+
+
+	//sections[1].push(sectionsNew);
+
+
+	//sectionsNew.push(lines);
+
+
 	//rebuilds lines array
 	linesArray= rebuildLinesArray(sections);
 	//rebuilds svgCode
@@ -1231,9 +1358,6 @@ function getCols(xStart, xEnd, xSpacing){
 }
 //Swaps 2 rows in the SVG, uses body section of the svg (sections[1]);
 function swapRows(n1, n2){
-	//const s = document.getElementById('showSVG');
-	//s.addEventListener('click', (e) => { console.log(e);});
-
 
 	var linesArray = new Array();
 	var swapLines = new Array();
@@ -1332,6 +1456,10 @@ function swapRows(n1, n2){
 }
 
 function upRowSwap(n1, labels){
+
+	var featureType = 'Swap row with upper row';
+	logInteractionsOneElement(featureType, n1);
+
 	var swapNum;
 
 	if(n1 != labels[0]){
@@ -1348,6 +1476,10 @@ function upRowSwap(n1, labels){
 }
 
 function downRowSwap(n1, labels){
+
+	var featureType = 'Swap row with lower row';
+	logInteractionsOneElement(featureType, n1);
+
 	var swapNum;
 
 	if(n1 != labels[length - 1]){
@@ -1365,6 +1497,11 @@ function downRowSwap(n1, labels){
 
 function leftRowSwap(n1, labels)
 {
+
+	var diagramType = 'leftRowSwapFunction';
+	logInteractionsOneElement(diagramType, n1);
+
+
 	setPriority(n1);
 
 	var svgCode = localStorage.getItem("svg");
@@ -1502,6 +1639,10 @@ function leftRowSwap(n1, labels)
 
 function rightRowSwap(n1, labels)
 {
+
+	var diagramType = 'rightRowSwapFunction';
+	logInteractionsOneElement(diagramType, n1);
+
 	setPriority(n1);
 
 	var svgCode = localStorage.getItem("svg");
@@ -1637,6 +1778,11 @@ function rightRowSwap(n1, labels)
 
 //work
 function newSwapRows(n1, n2){
+
+	var featureType = 'SwapingTwoRowsFunction';
+	logInteractionsTwoElements(featureType, n1, n2);
+
+
 	var linesArray = new Array();
 	var swapLines = new Array();
 	var svgStr = localStorage.getItem("svg");
@@ -1654,10 +1800,6 @@ function newSwapRows(n1, n2){
 	var end;
 	var size=0;
 
-	//const svgD3 = d3.select('showSVG').innerHTML;
-
-
-	//const svgD3 = d3.select('svg');
 
 	//here work
 	
@@ -1823,7 +1965,7 @@ function newDeleteRow(n1){
 
 	for (var i = 0; i <= swapNo.length - 1; i++){
 		if(i != num1){	
-			proxyLines.push(swapLines[i + 1])
+			currentLines.push(swapLines[i + 1])
 		}
 	}
 	
@@ -1938,4 +2080,21 @@ function getHeight(str){
 	height = lines.substr(start, size);
 
 	return height;
+}
+
+function logInteractionsOneElement(featureType, element){
+
+	let xhr = new XMLHttpRequest();
+	xhr.open('POST', 'http://localhost:3000/log', true);
+	xhr.send(featureType + ' element selected: ' + element);
+	// xhr.send('element selected');
+	// xhr.send(element);
+	// xhr.send('----------------');
+}
+
+function logInteractionsTwoElements(featureType, element1, element2){
+
+	let xhr = new XMLHttpRequest();
+	xhr.open('POST', 'http://localhost:3000/log', true);
+	xhr.send(featureType + ' elements selected: ' + element1 + ' and ' + element2);
 }

@@ -132,7 +132,7 @@
       frameHeight += 40;
     }
     var webpageURL = window.location.toString().substring(0,window.location.toString().lastIndexOf("/"));
-    var ret = '<iframe src="'+webpageURL+'/linear.html?width='+width+'&height='+height+'&textLengths='+textLengthsText+'&extraSpace=0'+'&guides='+guides+'&addUrl='+includeUrl+'&addCount=no'+'&strategy='+strategy+'&abstractDescription='+abstractDescriptionField+'" width="'+frameWidth+'" height="'+frameHeight+'" scrolling="no"></iframe>';
+    var ret = '<iframe src="'+webpageURL+'/linear.html?width='+width+'&height='+(height)+'&textLengths='+textLengthsText+'&extraSpace=0'+'&guides='+guides+'&addUrl='+includeUrl+'&addCount=no'+'&strategy='+strategy+'&abstractDescription='+abstractDescriptionField+'" width="'+frameWidth+'" height="'+frameHeight+'" scrolling="no"></iframe>';
     return ret;
   }
   

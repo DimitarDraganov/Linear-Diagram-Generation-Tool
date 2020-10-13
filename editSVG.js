@@ -1,4 +1,5 @@
 //import * as myModule  from 'd3.js';
+//import java.io.File;
 
 var svgCode = localStorage.getItem("svg");
 var downloadName = "linear.svg";
@@ -11,6 +12,7 @@ var num2;
 var guides;
 
 var selectedItems = new Array();
+var selectedOverlaps = new Array();
 
 function init() {
     //gets Guides from local storage
@@ -86,15 +88,23 @@ function init() {
 
 
     function addingSelectedItems(selectedItem){
+
+       
+        //var e = selectedItem.target.id;
+
         var e = selectedItem.target.textContent;
+        var q = selectedItem.target.id;
+
+        console.log(e)
         selectedItems.push(e);
+        selectedOverlaps.push(q);
     }
 
     const listener = document.getElementById('showSVG');
     listener.addEventListener('click', e => { addingSelectedItems(e);});
 
-    // const listener = document.getElementById('showSVG');
-    // listener.addEventListener('click', e => { console.log(e.target);});
+    //const listener = document.getElementById('showSVG');
+    //listener.addEventListener('click', e => { console.log(e.target);});
 
 
 
@@ -125,6 +135,10 @@ function deleteRow() {
 //Function used to pass values to swap cols function (from form)
 function cols() {
     swapCols(document.getElementById('col1').value, document.getElementById('col2').value);//see SVGTools.js
+}
+
+function columnSwap() {
+    newSwapCols(selectedOverlaps[0], selectedOverlaps[1]);//see SVGTools.js
 }
 
 function upSwap() {
@@ -368,3 +382,5 @@ function erasePrio() {
     localStorage.setItem("prioLabels", newPrio);
     localStorage.setItem("prioNum", newNum);
 }
+
+//document.getElementById('upRowSwap').onsubmit =  function(){upSwap()};
