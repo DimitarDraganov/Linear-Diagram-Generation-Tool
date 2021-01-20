@@ -92,8 +92,6 @@ function init() {
         var e = selectedItem.target.textContent;
         var q = selectedItem.target.id;
 
-        var x = selectedItem
-
         //console.log(e)
         console.log(q)
         selectedItems.push(e);
