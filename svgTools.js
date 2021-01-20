@@ -212,11 +212,17 @@ function sortForce(arr){
 	redrawOverlaps(rowOverlaps, spaceArray, sections, labels, xStartLine, spaceArray, yStartLbl, yStartLine, ySpacing, xPosArray, strokeArray, colNo);
 }
 
-function setPriority(arr){
+function setPriority(arr, toggleValue){
 	var svgCode = localStorage.getItem("svg");
 
 
 	var names = findRowNumber(svgCode, arr);
+
+	n1 = arr;
+	if (toggleValue) {
+		var featureType = 'Set row priority';
+		logInteractionsOneElement(featureType, n1);
+	}
 
 
 	var n1 = num1-1;
@@ -234,10 +240,6 @@ function setPriority(arr){
 	var tempGap;
 	var tempCols;
 	var gaps;
-
-
-	//var names = arr;
-
 
 	//variables for y axis
 	var yStartLbl;
@@ -1373,8 +1375,6 @@ function swapRows(n1, n2){
 	var end;
 	var size=0;
 
-	//const svgD3 = d3.select('showSVG').innerHTML;
-	//const svgD3 = d3.select('svg');
 	 
 
 
@@ -1502,7 +1502,7 @@ function leftRowSwap(n1, labels)
 	logInteractionsOneElement(diagramType, n1);
 
 
-	setPriority(n1);
+	setPriority(n1, false);
 
 	var svgCode = localStorage.getItem("svg");
 
@@ -1530,24 +1530,6 @@ function leftRowSwap(n1, labels)
 	//gets x End value
 	xStartEnd = getXLineEnd(linesLab);
 	//gets spacing of columns
-
-	// var xSpacing2;
-	// start = lines[0].indexOf("x1=")+4;	
-	// end = lines[0].indexOf("y1=")-2;
-	// size = end - start;
-	// tempStr = parseInt(lines[0].substr(start, size));
-	// xSpacing = tempStr - xStartLine;
-	// for(var i = 1; i < lines.length; i++){
-	// 	start = lines[i].indexOf("x1=")+4;	
-	// 	end = lines[i].indexOf("y1=")-2;
-	// 	size = end - start;
-	// 	tempStr = parseInt(lines[i].substr(start, size));
-	// 	xSpacing2 = tempStr - xStartLine;
-	// 	spaceArray.push(xSpacing2-xSpacing);
-	// 	xSpacing = xSpacing2;
-	// 	colNo++;
-	// }
-
 
 
 	colNum = linesLab.length - 2;
@@ -1602,7 +1584,6 @@ function leftRowSwap(n1, labels)
 
 	if (xStartLine !== integer)
 	{
-		//mirror rows
 		for (var i = 0; i < lines.length; i++) {
 
 			if(lines[i].includes("line ")){	
@@ -1618,7 +1599,6 @@ function leftRowSwap(n1, labels)
 				size = end - start;
 
 				xValue2 = parseInt(lines[i].substr(start + 4, size - 6));
-
 
 				newXvalue = (xStartEnd + xStartLine) - xValue2;
 				tempStr = lines[i].replace(xValue1,newXvalue);
@@ -1643,7 +1623,7 @@ function rightRowSwap(n1, labels)
 	var diagramType = 'rightRowSwapFunction';
 	logInteractionsOneElement(diagramType, n1);
 
-	setPriority(n1);
+	setPriority(n1, false);
 
 	var svgCode = localStorage.getItem("svg");
 
@@ -1671,24 +1651,6 @@ function rightRowSwap(n1, labels)
 	//gets x End value
 	xStartEnd = getXLineEnd(linesLab);
 	//gets spacing of columns
-
-	// var xSpacing2;
-	// start = lines[0].indexOf("x1=")+4;	
-	// end = lines[0].indexOf("y1=")-2;
-	// size = end - start;
-	// tempStr = parseInt(lines[0].substr(start, size));
-	// xSpacing = tempStr - xStartLine;
-	// for(var i = 1; i < lines.length; i++){
-	// 	start = lines[i].indexOf("x1=")+4;	
-	// 	end = lines[i].indexOf("y1=")-2;
-	// 	size = end - start;
-	// 	tempStr = parseInt(lines[i].substr(start, size));
-	// 	xSpacing2 = tempStr - xStartLine;
-	// 	spaceArray.push(xSpacing2-xSpacing);
-	// 	xSpacing = xSpacing2;
-	// 	colNo++;
-	// }
-
 
 
 	colNum = linesLab.length - 2;
@@ -1782,7 +1744,6 @@ function newSwapRows(n1, n2){
 	var featureType = 'SwapingTwoRowsFunction';
 	logInteractionsTwoElements(featureType, n1, n2);
 
-
 	var linesArray = new Array();
 	var swapLines = new Array();
 	var svgStr = localStorage.getItem("svg");
@@ -1801,7 +1762,6 @@ function newSwapRows(n1, n2){
 	var size=0;
 
 
-	//here work
 	
 
 	var sections = separateSVG(svgStr);
@@ -1874,10 +1834,6 @@ function newSwapRows(n1, n2){
 	//alert(svgCode);
 	//puts code into local storage to be redrawn by page.
 	localStorage.setItem("svg", svgCode);
-
-	
-	//localStorage.setItem("svg", svgD3);
-
 
 }
 
@@ -2087,9 +2043,6 @@ function logInteractionsOneElement(featureType, element){
 	let xhr = new XMLHttpRequest();
 	xhr.open('POST', 'http://localhost:3000/log', true);
 	xhr.send(featureType + ' element selected: ' + element);
-	// xhr.send('element selected');
-	// xhr.send(element);
-	// xhr.send('----------------');
 }
 
 function logInteractionsTwoElements(featureType, element1, element2){

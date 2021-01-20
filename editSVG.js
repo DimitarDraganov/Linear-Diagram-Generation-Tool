@@ -89,13 +89,13 @@ function init() {
 
     function addingSelectedItems(selectedItem){
 
-       
-        //var e = selectedItem.target.id;
-
         var e = selectedItem.target.textContent;
         var q = selectedItem.target.id;
 
-        console.log(e)
+        var x = selectedItem
+
+        //console.log(e)
+        console.log(q)
         selectedItems.push(e);
         selectedOverlaps.push(q);
     }
@@ -258,7 +258,7 @@ function changeGuides() {
 }
 
 function setRowPriority() {
-    setPriority(selectedItems[0]);
+    setPriority(selectedItems[0], true);
 }
 
 //Function used to reorder diagram based on priority lines.

@@ -1,16 +1,160 @@
-{"level":"debug"}
-{"level":"debug"}
-{"level":"debug"}
-{"level":"debug"}
-{"message":"mammal","level":"debug"}
-debug: pet
-debug: Swap columns
-debug: Swap columns
-debug: Swap columns
-debug: Swap columnselements selected:1and3
-debug: Swap columnselements selected:5and4
-----------------------------
-debug: Swap row with lower row element selected: mammal
-debug: Swap row with upper row element selected: mammal
-debug: Swap row with upper row element selected: mammal
-debug: Swap columns elements selected: 1 and 3
+debug: Swap row with upper row element selected: Japanese
+debug: SwapingTwoRowsFunction elements selected: Japanese and German
+debug: Swap row with upper row element selected: Japanese
+debug: SwapingTwoRowsFunction elements selected: Japanese and French
+debug: Swap row with upper row element selected: Japanese
+debug: SwapingTwoRowsFunction elements selected: Japanese and Finish
+debug: Swap row with upper row element selected: Japanese
+debug: SwapingTwoRowsFunction elements selected: Japanese and English
+debug: SwapingTwoRowsFunction elements selected: English and undefined
+debug: SwapingTwoRowsFunction elements selected: undefined and undefined
+debug: Swap row with upper row element selected: English
+debug: SwapingTwoRowsFunction elements selected: English and Japanese
+debug: Swap row with upper row element selected: English
+debug: SwapingTwoRowsFunction elements selected: English and Chinese
+debug: Swap row with upper row element selected: Japanese
+debug: SwapingTwoRowsFunction elements selected: Japanese and Chinese
+debug: Set row priority element selected: English
+debug: Set row priority element selected: Japanese
+debug: Swap row with upper row element selected: Japanese
+debug: SwapingTwoRowsFunction elements selected: Japanese and undefined
+debug: Swap row with upper row element selected: 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ Android
+  
+  
+  
+ Apple
+  
+  
+ PC
+  
+  
+ PSP
+  
+  
+ Switch
+  
+  
+  
+ Wii
+  
+ Xbox
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+
+debug: SwapingTwoRowsFunction elements selected: 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ Android
+  
+  
+  
+ Apple
+  
+  
+ PC
+  
+  
+ PSP
+  
+  
+ Switch
+  
+  
+  
+ Wii
+  
+ Xbox
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+ and undefined
+debug: Swap row with upper row element selected: Switch
+debug: SwapingTwoRowsFunction elements selected: Switch and PSP
+debug: Swap row with upper row element selected: Switch
+debug: SwapingTwoRowsFunction elements selected: Switch and PC
+debug: Swap row with upper row element selected: Switch
+debug: SwapingTwoRowsFunction elements selected: Switch and Apple
+debug: Set row priority element selected: Android
+debug: Set row priority element selected: Switch
+debug: Swap row with upper row element selected: travel
+debug: SwapingTwoRowsFunction elements selected: travel and news
+debug: Swap row with upper row element selected: travel
+debug: SwapingTwoRowsFunction elements selected: travel and media
+debug: Swap columns elements selected: travel and bands
+debug: SwapingTwoRowsFunction elements selected: travel and bands
+debug: leftRowSwapFunction element selected: design
+debug: Set row priority element selected: design
+debug: leftRowSwapFunction element selected: travel
+debug: Set row priority element selected: travel
+debug: Swap row with upper row element selected: news
+debug: SwapingTwoRowsFunction elements selected: news and media
+debug: Swap row with upper row element selected: news
+debug: SwapingTwoRowsFunction elements selected: news and health
+debug: Swap row with upper row element selected: news
+debug: SwapingTwoRowsFunction elements selected: news and fitness
+debug: Swap row with upper row element selected: news
+debug: SwapingTwoRowsFunction elements selected: news and design
+debug: Swap row with upper row element selected: news
+debug: SwapingTwoRowsFunction elements selected: news and bands
+debug: Swap row with upper row element selected: design
+debug: SwapingTwoRowsFunction elements selected: design and bands
