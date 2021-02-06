@@ -1,13 +1,8 @@
-/* svg:hover {
-    background-color: #3e8e41;
-  } */
-
-
 text:hover {
-    fill: #3e8e41;
+    fill: #000000;
   }
 
-
-  /* svg:hover text {
-    fill:green;
-  } */
+circle:hover {
+    fill: #000000;
+    stroke: #000000;
+  }

@@ -11,7 +11,6 @@ var num1;
 var num2;
 var guides;
 
-var selectedItems = new Array();
 var selectedOverlaps = new Array();
 
 function init() {
@@ -25,51 +24,6 @@ function init() {
         svgCode = localStorage.getItem("svg");//Gets Svg string from local storage.
 
         document.getElementById('showSVG').innerHTML = svgCode;	//draws image
-
-        // const s = document.getElementById('showSVG');
-        // s.addEventListener('click', (e) => { console.log(e);});
-        //const s = document.getElementById('pet');
-        //s.addEventListener('click', (e) => { console.log(e.AT_TARGET);});
-
-
-        //var s = d3.select('showSVG').html(svgCode);
-
-        //var s = d3.select('showSVG');
-
-        //var circle = s.append('circle');
-        //const circle = g.append('circle');
-
-
-         //const svgq = d3.select('showSVG');
-
-         //const widthq = +svgq.attr('width');
-         //const heightq = +svgq.attr('height');
-
-        // const g = svgq.append('g')
-        //     .attr('transform', `translate(${widthq / 2}, ${heightq / 2})`);
-
-
-
-        //.on('click', () => console.log("sss"));
-
-
-        //d3.selection.prototype.appendSVG = 
-        //d3.selection.enter.prototype.appendSVG = function(svgCode) {
-        //return this.select(function() {
-        //return this.appendChild(document.importNode(new DOMParser()
-        //				.parseFromString('<svg xmlns="http://www.w3.org/2000/svg">' + SVGString + '</svg>', 'application/xml').documentElement.firstChild, true)); }); 
-        //};
-
-
-
-        //var svg = d3.selectAll('showSVG').appendHTML(showSVG);
-
-
-
-
-
-        //const s = document.getElementById('showSVG');
-        //s.addEventListener('click', e => { console.log(e.target);});
 
     } else if (guides == 'background') {
         document.getElementById('guidesNone').checked = false;
@@ -87,24 +41,16 @@ function init() {
 
 
 
-    function addingSelectedItems(selectedItem){
-
-        var e = selectedItem.target.textContent;
+    function addingSelectedItems(selectedItem) {
+        //handles the item selection, work on by getting the Id of the label or the id of a column button
         var q = selectedItem.target.id;
 
-        //console.log(e)
         console.log(q)
-        selectedItems.push(e);
         selectedOverlaps.push(q);
     }
 
     const listener = document.getElementById('showSVG');
-    listener.addEventListener('click', e => { addingSelectedItems(e);});
-
-    //const listener = document.getElementById('showSVG');
-    //listener.addEventListener('click', e => { console.log(e.target);});
-
-
+    listener.addEventListener('click', e => { addingSelectedItems(e); });
 
     //Date used for saving file.
     var date = new Date();
@@ -123,12 +69,17 @@ function rows() {
 }
 
 function newRows() {
-    newSwapRows(selectedItems[0], selectedItems[1]);//see SVGTools.js
+    var value1 = selectedOverlaps[0];
+    var value2 = selectedOverlaps[1];
+
+    //checks to see if the input in "selectedOverlaps" is the proper type
+    if (typeof value1 != "undefined" && value1 != null && value1.length != null && value1.length > 0 && isNaN(value1) &&
+        value2 != "undefined" && value2 != null && value2.length != null && value2.length > 0 && isNaN(value2)) {
+
+        newSwapRows(value1, value2);//see SVGTools.js
+    }
 }
 
-function deleteRow() {
-    newDeleteRow(selectedItems[0]);
-}
 
 //Function used to pass values to swap cols function (from form)
 function cols() {
@@ -136,7 +87,15 @@ function cols() {
 }
 
 function columnSwap() {
-    newSwapCols(selectedOverlaps[0], selectedOverlaps[1]);//see SVGTools.js
+    var value1 = selectedOverlaps[0];
+    var value2 = selectedOverlaps[1];
+
+    //checks to see if the input in "selectedOverlaps" is the proper type
+    if (typeof value1 != "undefined" && value1 != null && value1.length != null && value1.length > 0 && !isNaN(value1) &&
+        value2 != "undefined" && value2 != null && value2.length != null && value2.length > 0 && !isNaN(value2)) {
+
+        newSwapCols(value1, value2);//see SVGTools.js
+    }
 }
 
 function upSwap() {
@@ -148,18 +107,22 @@ function upSwap() {
     var swapNo = getLineNo(lines);
     var labels = getLabels(lines, swapNo);
 
-    if(currentSelection === selectedItems[0]){
+    var lastSelectedLabel = selectedOverlaps[0];
+
+    if (lastSelectedLabel == undefined) {
         upRowSwap(currentSelection, labels);
     }
-    if(selectedItems[0] === undefined){
-        upRowSwap(currentSelection, labels);
+    else {
+        if (currentSelection == lastSelectedLabel) {
+            upRowSwap(currentSelection, labels);
+        }
+        else {
+            localStorage.setItem("selectedLabel", lastSelectedLabel);
+            upRowSwap(lastSelectedLabel, labels);
+
+        }
     }
-    else{
-        localStorage.setItem("selectedLabel", selectedItems[0]);
-        upRowSwap(selectedItems[0], labels); 
-        
-    }
-    
+
 }
 
 function downSwap() {
@@ -171,17 +134,22 @@ function downSwap() {
     var swapNo = getLineNo(lines);
     var labels = getLabels(lines, swapNo);
 
-    if(currentSelection === selectedItems[0]){
+    var lastSelectedLabel = selectedOverlaps[0];
+
+    if (lastSelectedLabel == undefined) {
         downRowSwap(currentSelection, labels);
     }
-    if(selectedItems[0] === undefined){
-        downRowSwap(currentSelection, labels);
+    else {
+        if (currentSelection == lastSelectedLabel) {
+            downRowSwap(currentSelection, labels);
+        }
+        else {
+            localStorage.setItem("selectedLabel", lastSelectedLabel);
+            downRowSwap(lastSelectedLabel, labels);
+
+        }
     }
-    else{
-        localStorage.setItem("selectedLabel", selectedItems[0]);
-        downRowSwap(selectedItems[0], labels); 
-        
-    }
+
 }
 
 function leftSwap() {
@@ -193,17 +161,22 @@ function leftSwap() {
     var swapNo = getLineNo(lines);
     var labels = getLabels(lines, swapNo);
 
-    if(currentSelection === selectedItems[0]){
+    var lastSelectedLabel = selectedOverlaps[0];
+
+    if (lastSelectedLabel == undefined) {
         leftRowSwap(currentSelection, labels);
     }
-    if(selectedItems[0] === undefined){
-        leftRowSwap(currentSelection, labels);
+    else {
+        if (currentSelection == lastSelectedLabel) {
+            leftRowSwap(currentSelection, labels);
+        }
+        else {
+            localStorage.setItem("selectedLabel", lastSelectedLabel);
+            leftRowSwap(lastSelectedLabel, labels);
+
+        }
     }
-    else{
-        localStorage.setItem("selectedLabel", selectedItems[0]);
-        leftRowSwap(selectedItems[0], labels); 
-        
-    }   
+
 }
 
 function rightSwap() {
@@ -215,17 +188,23 @@ function rightSwap() {
     var swapNo = getLineNo(lines);
     var labels = getLabels(lines, swapNo);
 
-    if(currentSelection === selectedItems[0]){
+    var lastSelectedLabel = selectedOverlaps[0];
+
+    //saves the previously selected label
+    if (lastSelectedLabel == undefined) {
         rightRowSwap(currentSelection, labels);
     }
-    if(selectedItems[0] === undefined){
-        rightRowSwap(currentSelection, labels);
+    else {
+        if (currentSelection == lastSelectedLabel) {
+            rightRowSwap(currentSelection, labels);
+        }
+        else {
+            localStorage.setItem("selectedLabel", lastSelectedLabel);
+            rightRowSwap(lastSelectedLabel, labels);
+
+        }
     }
-    else{
-        localStorage.setItem("selectedLabel", selectedItems[0]);
-        rightRowSwap(selectedItems[0], labels); 
-        
-    }   
+
 }
 
 //Function for reording diagram with minimum line spaces
@@ -256,7 +235,7 @@ function changeGuides() {
 }
 
 function setRowPriority() {
-    setPriority(selectedItems[0], true);
+    setPriority(selectedOverlaps[0], true);
 }
 
 //Function used to reorder diagram based on priority lines.
@@ -380,5 +359,3 @@ function erasePrio() {
     localStorage.setItem("prioLabels", newPrio);
     localStorage.setItem("prioNum", newNum);
 }
-
-//document.getElementById('upRowSwap').onsubmit =  function(){upSwap()};

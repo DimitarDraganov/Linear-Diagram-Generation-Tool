@@ -1449,9 +1449,6 @@ function swapRows(n1, n2){
 	//puts code into local storage to be redrawn by page.
 	localStorage.setItem("svg", svgCode);
 
-	
-	//localStorage.setItem("svg", svgD3);
-
 
 }
 
@@ -1465,8 +1462,6 @@ function upRowSwap(n1, labels){
 	if(n1 != labels[0]){
 
 		for(var i = 0; i < labels.length; i++){
-
-			//if(n1 != labels[length[0]]){
 				if(labels[i].includes(n1)){
 					swapNum = labels[i - 1];
 				}
@@ -1895,48 +1890,6 @@ function findRowNumbers(svgStr, n1, n2){
 // 	return rowNumber;
 // }
 
-
-function newDeleteRow(n1){
-	var linesArray = new Array();
-	var swapLines = new Array();
-	var svgStr = localStorage.getItem("svg");
-
-	var rowNumber = findRowNumber(svgStr, n1);
-
-	var svgCode;
-	var num1 = rowNumber[0];
-	var swapNo = new Array(); 
-	
-
-	var sections = separateSVG(svgStr);
-	var lines = sections[1];
-
-
-	//LABEL SWAP START
-	//finds the index of the main line for each label
-	swapNo = getLineNo(lines);
-
-	var currentLines = new Array();
-	swapLines = getLines(lines);
-
-	for (var i = 0; i <= swapNo.length - 1; i++){
-		if(i != num1){	
-			currentLines.push(swapLines[i + 1])
-		}
-	}
-	
-	sections[1] = currentLines;
-
-	
-
-
-	//rebuilds lines array
-	linesArray = rebuildLinesArray(sections);
-	//rebuilds svgCode
-	svgCode = rebuildSvg(linesArray);
-	//puts code into local storage to be redrawn by page.
-	localStorage.setItem("svg", svgCode);
-}
 
 function findRowNumber(svgStr, n1){
 	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
