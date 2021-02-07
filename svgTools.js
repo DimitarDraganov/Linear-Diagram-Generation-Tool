@@ -213,6 +213,7 @@ function sortForce(arr){
 }
 
 function setPriority(arr, toggleValue){
+	//redraws svg with a specific row drawn as one line
 	var svgCode = localStorage.getItem("svg");
 
 
@@ -844,95 +845,8 @@ function checkGaps(arr){
 	
 	return gaps;
 }
-//Function to get overlaps vertical
-function swapCols(n1, n2){
-	var svgCode = localStorage.getItem("svg");
-	var labels = new Array();
-	var rowOverlaps = new Array();
-	var swapNo = new Array();
-	var colOverLaps = new Array();
-	var strokeArray = new Array();
-	var xPosArray = new Array();
-	var tempArr = new Array();
-	var num1 = n1-1;
-	var num2 = n2-1;
-	//variables for y axis
-	var yStartLbl;
-	var yStartLine;
-	var ySpacing;
-	//variables for x axis
-	var spaceArray = new Array();
-	var xStartEnd;
-	var xStartLine;
-	var xSpacing;
-	//temp values
-	var start;
-	var end;
-	var size;
-	var tempStr;
-	var colNo = -1;
-	var sections = separateSVG(svgCode);
-	//GET Y AXIS VALUES
-	var lines = sections[1];
-	//gets label y start value
-	yStartLbl = getYStart(lines);
-	//gets line y start value
-	yStartLine = getYStartLine(lines);
-	//gets y axis spacing
-	swapNo = getLineNo(lines);
-	ySpacing = getYAxisSpace(lines, yStartLbl, swapNo);
-	//GET X AXIS VALUES
-	lines = sections[0];
-	//gets starting x value
-	xStartLine = getXLineStart(lines);
-	//gets x End value
-	xEnd = getXLineEnd(lines);
-	//gets spacing of columns
-	var xSpacing2;
-	start = lines[0].indexOf("x1=")+4;	
-	end = lines[0].indexOf("y1=")-2;
-	size = end - start;
-	tempStr = parseInt(lines[0].substr(start, size));
-	xSpacing = tempStr - xStartLine;
-	//loop to find spacing of each column.
-	for(var i = 1; i < lines.length; i++){
-		start = lines[i].indexOf("x1=")+4;	
-		end = lines[i].indexOf("y1=")-2;
-		size = end - start;
-		tempStr = parseInt(lines[i].substr(start, size));
-		xSpacing2 = tempStr - xStartLine;
-		spaceArray.push(xSpacing2-xSpacing);
-		xSpacing = xSpacing2;
-		colNo++;
-	}
-	spaceArray.shift();
-	//gets array of labels
-	labels = getLabels(sections[1], swapNo);
-	strokeArray = getStrokes(sections[1], swapNo);
-	xPosArray = getXPos(sections[1], swapNo);
-	//gets populated columns for each row
-	lines = sections[1];
-	lines = getLines(lines);
-	lines.shift();
-	for (var i = 0; i < lines.length; i++) {
-		rowOverlaps.push(rowPop(lines[i], colNo, spaceArray, xStartLine));
-	}
-	//swaps columns
-	colOverLaps = transpose(rowOverlaps);
-	tempArr = colOverLaps[num1];
-	colOverLaps[num1] = colOverLaps[num2];
-	colOverLaps[num2] = tempArr;
-	//swaps spacing for columns
-	tempArr = spaceArray[num1];
-	spaceArray[num1] = spaceArray[num2];
-	spaceArray[num2] = tempArr;
-	//reverts array back to row by row;
-	rowOverlaps = transpose(colOverLaps);
-		
-	svgCode = redrawOverlaps(rowOverlaps, spaceArray, sections, labels, xStartLine, spaceArray, yStartLbl, yStartLine, ySpacing, xPosArray, strokeArray, colNo);
-}
 
-function newSwapCols(n1, n2){
+function swapCols(n1, n2){
 
 	var diagramType = 'Swap columns';
 
@@ -1171,13 +1085,10 @@ function redrawOverlaps(rowsArray, colSpaces, sectionsArr, labelsArr, xStartLine
 
 	}
 
-
 	newStart = changeGuide(sections[0], spaceArray, colNo);
 	
 	sections[0] = newStart;
 	sections[1] = tempStrArr;
-
-
 
 	var sectionsNew = new Array();
 
@@ -1189,13 +1100,6 @@ function redrawOverlaps(rowsArray, colSpaces, sectionsArr, labelsArr, xStartLine
 			sections[1].push(sectionsWithOverlaps[y]);
 		}
 	}
-
-
-	//sections[1].push(sectionsNew);
-
-
-	//sectionsNew.push(lines);
-
 
 	//rebuilds lines array
 	linesArray= rebuildLinesArray(sections);
@@ -1245,7 +1149,6 @@ function changeGuide(arr, spaceArr, cols){
 		newArr.push(tempStr);
 		tempStr = "";
 	}	
-	
 	
 	return newArr;
 }	
@@ -1358,99 +1261,6 @@ function getCols(xStart, xEnd, xSpacing){
 	colsNo = (xEnd - xStart)/xSpacing;
 	return colsNo;
 }
-//Swaps 2 rows in the SVG, uses body section of the svg (sections[1]);
-function swapRows(n1, n2){
-
-	var linesArray = new Array();
-	var swapLines = new Array();
-	var svgStr = localStorage.getItem("svg");
-	var svgCode;
-	var num1 = n1-1;
-	var num2 = n2-1;
-	var swapNo = new Array(); 
-	var tempStr = "";
-	var y1 = "";
-	var y2 = "";
-	var start;
-	var end;
-	var size=0;
-
-	 
-
-
-	var sections = separateSVG(svgStr);
-	var lines = sections[1];
-	//LABEL SWAP START
-	//finds the index of the main line for each label
-	swapNo = getLineNo(lines);
-	//gets substring of y value for first line
-	start = lines[swapNo[num1]].indexOf('y=');
-	end = lines[swapNo[num1]].indexOf('fill=');
-	size = end - start;
-	y1 = lines[swapNo[num1]].substr(start, size);
-	//gets substring for y value for second line
-	start = lines[swapNo[num2]].indexOf('y=');
-	end = lines[swapNo[num2]].indexOf('fill=');
-	size = end - start;
-	y2 = lines[swapNo[num2]].substr(start, size);
-	//swap "y=" sections of the strings
-	tempStr = lines[swapNo[num1]].replace(y1,y2);
-	lines[swapNo[num1]] = tempStr;
-	tempStr = lines[swapNo[num2]].replace(y2,y1);
-	lines[swapNo[num2]] = tempStr;
-	//LABEL SWAP END
-	//LINES SWAP START
-	tempStr = "";
-	num1 = n1;
-	num2 = n2;
-	swapLines = getLines(lines);
-	//gets substring of y1 value for first line
-	start = swapLines[num1].indexOf('y1="');
-	end = swapLines[num1].indexOf('x2=');
-	size = end - start;
-	y1 = swapLines[num1].substr(start, size);
-	//gets substring for y1 value for second line
-	start = swapLines[num2].indexOf('y1="');
-	end = swapLines[num2].indexOf('x2=');
-	size = end - start;
-	y2 = swapLines[num2].substr(start, size);
-	//swap y1 values for both lines
-	tempStr = swapLines[num1].replace(RegExp(y1, "g"),y2);
-	swapLines[num1] = tempStr;
-	tempStr = swapLines[num2].replace(RegExp(y2, "g"),y1);
-	swapLines[num2] = tempStr;
-	//gets substring of y2 value for first line
-	start = swapLines[num1].indexOf('y2="');
-	end = swapLines[num1].indexOf(' stroke=');
-	size = end - start;
-	y1 = swapLines[num1].substr(start, size);
-	//gets substring for y2 value for second line
-	start = swapLines[num2].indexOf('y2="');
-	end = swapLines[num2].indexOf(' stroke=');
-	size = end - start;
-	y2 = swapLines[num2].substr(start, size);
-	//swap y2 values for both lines
-	tempStr = swapLines[num1].replace(RegExp(y1, "g"),y2);
-	swapLines[num1] = tempStr;
-	tempStr = swapLines[num2].replace(RegExp(y2, "g"),y1);
-	swapLines[num2] = tempStr;
-	lines = swapLines[num1];
-	swapLines[num1] = swapLines[num2]
-	swapLines[num2] = lines;
-	swapLines.shift();
-	//LINES SWAP END
-	//sets the new value of sections[1] as the changes lines
-	sections[1] = swapLines;
-	//rebuilds lines array
-	linesArray = rebuildLinesArray(sections);
-	//rebuilds svgCode
-	svgCode = rebuildSvg(linesArray);
-	//alert(svgCode);
-	//puts code into local storage to be redrawn by page.
-	localStorage.setItem("svg", svgCode);
-
-
-}
 
 function upRowSwap(n1, labels){
 
@@ -1466,7 +1276,7 @@ function upRowSwap(n1, labels){
 					swapNum = labels[i - 1];
 				}
 		}
-		newSwapRows(n1, swapNum);
+		swapRows(n1, swapNum);
 	}
 }
 
@@ -1486,7 +1296,7 @@ function downRowSwap(n1, labels){
 					swapNum = labels[i + 1];
 				}
 		}
-		newSwapRows(n1, swapNum);
+		swapRows(n1, swapNum);
 	}
 }
 
@@ -1513,9 +1323,6 @@ function leftRowSwap(n1, labels)
 	var SpaceBetweenCol;
 
 	var colNum;
-
-
-	
 
 
 	//GET X AXIS VALUES
@@ -1553,29 +1360,6 @@ function leftRowSwap(n1, labels)
 
 
 	var integer = parseInt(y1, 10);
-
-	// for(var i = 1; i < lines.length; i++){
-	// 	start = lines[i].indexOf("x1=")+4;	
-	// 	end = lines[i].indexOf("y1=")-2;
-	// 	size = end - start;
-	// 	tempStr = parseInt(lines[i].substr(start, size));
-	// 	xSpacing2 = tempStr - xStartLine;
-	// 	spaceArray.push(xSpacing2-xSpacing);
-	// 	xSpacing = xSpacing2;
-	// 	colNo++;
-	// }
-
-
-	// function getLineNo(input){
-	// 	var swapNo = new Array();
-	// 	var lines = input;
-	// 	for(var i = 0; i< lines.length; i++){
-	// 		if(lines[i].includes("text id=")){
-	// 			swapNo.push(i);
-	// 		}
-	// 	}
-	// 	return swapNo;
-	// }
 
 	if (xStartLine !== integer)
 	{
@@ -1636,9 +1420,6 @@ function rightRowSwap(n1, labels)
 	var colNum;
 
 
-	
-
-
 	//GET X AXIS VALUES
 	linesLab = sections[0];
 	//gets starting x value
@@ -1675,29 +1456,6 @@ function rightRowSwap(n1, labels)
 
 	var integer = parseInt(y2, 10);
 
-	// for(var i = 1; i < lines.length; i++){
-	// 	start = lines[i].indexOf("x1=")+4;	
-	// 	end = lines[i].indexOf("y1=")-2;
-	// 	size = end - start;
-	// 	tempStr = parseInt(lines[i].substr(start, size));
-	// 	xSpacing2 = tempStr - xStartLine;
-	// 	spaceArray.push(xSpacing2-xSpacing);
-	// 	xSpacing = xSpacing2;
-	// 	colNo++;
-	// }
-
-
-	// function getLineNo(input){
-	// 	var swapNo = new Array();
-	// 	var lines = input;
-	// 	for(var i = 0; i< lines.length; i++){
-	// 		if(lines[i].includes("text id=")){
-	// 			swapNo.push(i);
-	// 		}
-	// 	}
-	// 	return swapNo;
-	// }
-
 	if (xStartEnd !== integer)
 	{
 		//mirror rows
@@ -1733,8 +1491,7 @@ function rightRowSwap(n1, labels)
 	}
 }
 
-//work
-function newSwapRows(n1, n2){
+function swapRows(n1, n2){
 
 	var featureType = 'SwapingTwoRowsFunction';
 	logInteractionsTwoElements(featureType, n1, n2);
@@ -1834,7 +1591,6 @@ function newSwapRows(n1, n2){
 
 function findRowNumbers(svgStr, n1, n2){
 	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
-	var sections = new Array();
 
 	var workArray = new Array();
 
@@ -1858,38 +1614,6 @@ function findRowNumbers(svgStr, n1, n2){
 
 	return rowNumber;
 }
-
-//work
-
-
-// function workSVG(svgStr){
-// 	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
-// 	var sections = new Array();
-
-// 	var workArray = new Array();
-// 	var value1 = "dog";
-
-// 	var rowNumber;
-
-// 	var svgCode = svgStr;
-// 	linesArray = splitSvg(svgCode);
-// 	linesArray.shift();
-// 	//finds where last guide line is drawn.
-// 	for(var i = 0; i < linesArray.length; i++){
-// 		if((linesArray[i].includes("text id="))){
-// 			workArray.push(linesArray[i]);
-// 		}
-// 	}
-
-// 	for(var i = 0; i < workArray.length; i++){
-// 		if (workArray[i].includes(value1)){
-// 			rowNumber = i;
-// 		}
-// 	}
-
-// 	return rowNumber;
-// }
-
 
 function findRowNumber(svgStr, n1){
 	var linesArray = new Array();//contains the svg file up to the last guide line, will be reassembled later.
@@ -1992,14 +1716,14 @@ function getHeight(str){
 }
 
 function logInteractionsOneElement(featureType, element){
-
+	//one element interaction like moving a row up or down
 	let xhr = new XMLHttpRequest();
 	xhr.open('POST', 'http://localhost:3000/log', true);
 	xhr.send(featureType + ' element selected: ' + element);
 }
 
 function logInteractionsTwoElements(featureType, element1, element2){
-
+	//two element interactions like swaping two rows with each other
 	let xhr = new XMLHttpRequest();
 	xhr.open('POST', 'http://localhost:3000/log', true);
 	xhr.send(featureType + ' elements selected: ' + element1 + ' and ' + element2);

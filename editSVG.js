@@ -1,6 +1,3 @@
-//import * as myModule  from 'd3.js';
-//import java.io.File;
-
 var svgCode = localStorage.getItem("svg");
 var downloadName = "linear.svg";
 var row1;
@@ -40,15 +37,14 @@ function init() {
     }
 
 
-
     function addingSelectedItems(selectedItem) {
         //handles the item selection, work on by getting the Id of the label or the id of a column button
         var q = selectedItem.target.id;
-
-        console.log(q)
+        
         selectedOverlaps.push(q);
     }
 
+    //Add event listener to svg
     const listener = document.getElementById('showSVG');
     listener.addEventListener('click', e => { addingSelectedItems(e); });
 
@@ -63,12 +59,9 @@ function init() {
     //displays any selected prioity labels.
     document.getElementById('prioList').innerHTML = prioList();
 }
-//Function used to pass values to swap rows function (from form)
-function rows() {
-    swapRows(document.getElementById('row1').value, document.getElementById('row2').value);//see SVGTools.js
-}
 
-function newRows() {
+//Function used to pass values to swap rows function (from form)
+function rowSwap() {
     var value1 = selectedOverlaps[0];
     var value2 = selectedOverlaps[1];
 
@@ -76,16 +69,11 @@ function newRows() {
     if (typeof value1 != "undefined" && value1 != null && value1.length != null && value1.length > 0 && isNaN(value1) &&
         value2 != "undefined" && value2 != null && value2.length != null && value2.length > 0 && isNaN(value2)) {
 
-        newSwapRows(value1, value2);//see SVGTools.js
+        swapRows(value1, value2);//see SVGTools.js
     }
 }
 
-
-//Function used to pass values to swap cols function (from form)
-function cols() {
-    swapCols(document.getElementById('col1').value, document.getElementById('col2').value);//see SVGTools.js
-}
-
+//Function used to pass values to swap column function (from form)
 function columnSwap() {
     var value1 = selectedOverlaps[0];
     var value2 = selectedOverlaps[1];
@@ -94,11 +82,12 @@ function columnSwap() {
     if (typeof value1 != "undefined" && value1 != null && value1.length != null && value1.length > 0 && !isNaN(value1) &&
         value2 != "undefined" && value2 != null && value2.length != null && value2.length > 0 && !isNaN(value2)) {
 
-        newSwapCols(value1, value2);//see SVGTools.js
+        swapCols(value1, value2);//see SVGTools.js
     }
 }
 
 function upSwap() {
+    //Swaps a row with the row bellow it
     var currentSelection = localStorage.getItem("selectedLabel");
 
     var svgString = localStorage.getItem("svg");
@@ -109,6 +98,7 @@ function upSwap() {
 
     var lastSelectedLabel = selectedOverlaps[0];
 
+    //saves the previously selected label
     if (lastSelectedLabel == undefined) {
         upRowSwap(currentSelection, labels);
     }
@@ -119,13 +109,13 @@ function upSwap() {
         else {
             localStorage.setItem("selectedLabel", lastSelectedLabel);
             upRowSwap(lastSelectedLabel, labels);
-
         }
     }
 
 }
 
 function downSwap() {
+    //Swaps a row with the row above it
     var currentSelection = localStorage.getItem("selectedLabel");
 
     var svgString = localStorage.getItem("svg");
@@ -136,6 +126,7 @@ function downSwap() {
 
     var lastSelectedLabel = selectedOverlaps[0];
 
+    //saves the previously selected label
     if (lastSelectedLabel == undefined) {
         downRowSwap(currentSelection, labels);
     }
@@ -146,13 +137,13 @@ function downSwap() {
         else {
             localStorage.setItem("selectedLabel", lastSelectedLabel);
             downRowSwap(lastSelectedLabel, labels);
-
         }
     }
 
 }
 
 function leftSwap() {
+    //Move a row to the left of the SVG
     var currentSelection = localStorage.getItem("selectedLabel");
 
     var svgString = localStorage.getItem("svg");
@@ -163,6 +154,7 @@ function leftSwap() {
 
     var lastSelectedLabel = selectedOverlaps[0];
 
+    //saves the previously selected label
     if (lastSelectedLabel == undefined) {
         leftRowSwap(currentSelection, labels);
     }
@@ -173,13 +165,13 @@ function leftSwap() {
         else {
             localStorage.setItem("selectedLabel", lastSelectedLabel);
             leftRowSwap(lastSelectedLabel, labels);
-
         }
     }
 
 }
 
 function rightSwap() {
+    //Move a row to the right of the SVG
     var currentSelection = localStorage.getItem("selectedLabel");
 
     var svgString = localStorage.getItem("svg");
@@ -201,7 +193,6 @@ function rightSwap() {
         else {
             localStorage.setItem("selectedLabel", lastSelectedLabel);
             rightRowSwap(lastSelectedLabel, labels);
-
         }
     }
 
